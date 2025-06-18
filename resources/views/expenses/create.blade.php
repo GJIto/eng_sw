@@ -3,9 +3,11 @@
       New Expense
     </x-slot:heading>
 
-  <form method="POST" action="/expense">
+  {{-- <form method="POST" action="/expenses"> --}}
+  <form method="POST" action="{{ route('expenses.store') }}">
     @csrf
-
+    {{-- {{ dd($group) }} --}}
+    <input type="hidden" name="group_id" value="{{ $group->id }}">
     <div class="space-y-12">
       <div class="border-b border-gray-900/10 pb-12">
         <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">

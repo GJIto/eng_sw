@@ -19,7 +19,9 @@
           <div class="hidden md:block">
             <div class="ml-10 flex items-baseline space-x-4">
               <x-nav-link href="/" :active="request()->is('/')">Home</x-nav-link>
-              <x-nav-link href="/groups" :active="request()->is('groups')">Groups</x-nav-link>
+              @auth
+                <x-nav-link href="/groups" :active="request()->is('groups')">Groups</x-nav-link>
+              @endauth
             </div>
           </div>
         </div>
@@ -32,6 +34,9 @@
             @endguest
 
             @auth
+            <span class="text-white mr-4">
+              {{ Auth::user()->first_name }}
+            </span>
               <form method="POST" action="/logout">
                   @csrf
                   <x-form-button>Log Out</x-form-button>

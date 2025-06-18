@@ -3,28 +3,41 @@
     <x-slot:heading>
         {{ $group->group_name }} 
         <h1 class="font-bold text-lg"></h1>
-        {{-- {{ dd($group['user']) }} --}}
         
-        <x-button href="/groups/{{ $group->id }}/expense">Add expense</x-button>
-        
+        {{-- <x-button href="/groups/{{ $group->id }}/expenses">Add expense</x-button> --}}
+        <x-button :href="route('expenses.create', $group)">Add expense</x-button>
     </x-slot:heading>
-{{-- {{ dd($group->user[0]->first_name) }} --}}
-    Members:
-        @foreach ($group->user as $user)
-            <p class="block px-2 py-2 border border-gray-50 rounded-lg">{{ $user->first_name }}  </p>
-        @endforeach
 
-        @foreach ($group['expenses'] as $desp)
+    <strong>Members:</strong>
+
+    @foreach ($group->user as $user)
+        <p class="block px-2 py-2 border border-gray-50 rounded-lg">{{ $user->first_name }}  </p>
+    @endforeach
+
+    <form method="POST" action="{{ route('groups.addMember', $group) }}">
+        @csrf
         
-                <div class="block px-4 py-6 border border-gray-200 rounded-lg"> 
-                    
-                        <div class="font-bold text-blue-500 text-sm"> {{ $desp->description }}</div>
-                        <div>
-                            R$ <strong>{{ $desp->amount }}</strong> 
-                        </div>
-                        Created: {{ $desp -> created_at }}
-                </div>       
-        @endforeach
-        {{-- <p class="">{{ dd($desp) }}</p> --}}
+        <x-form-label for="email">Add member by email:</x-form-label>
+        <x-form-input type="email" name="email" id="email" required placeholder="user@example.com" />
+        <div class="mt-2">
+            <x-form-button type="submit">Add Member</x-form-button>
+        </div>
+
+    </form>
+
+    @foreach ($group as $item)
+    @endforeach
+
+    @foreach ($group->expenses as $expense)
+            
+            <div class="block px-4 py-6 border border-gray-200 rounded-lg"> 
+                
+                    <div class="font-bold text-blue-500 text-sm"> {{ $expense->description }}</div>
+                    <div>
+                        <strong>R${{ number_format($expense->amount, 2) }}</strong> 
+                    </div>
+                    Owner: <strong>{{ $expense->user->first_name}}</strong> <br>Data: {{ $expense->created_at->format('d M Y, H:i') }}
+            </div>       
+    @endforeach
 
 </x-layout>

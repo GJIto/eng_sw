@@ -8,11 +8,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'home');
 
+
 Route::resource('groups', GroupController::class);
 
-Route::resource('expense', ExpenseController::class);
+Route::resource('expenses', ExpenseController::class);
 
-Route::get('/groups/{group_id}/expense',[ExpenseController::class, 'create']);
+Route::get('/groups/{group}/expenses/create', [ExpenseController::class, 'create'])->name('expenses.create');
+Route::post('/groups/{group}/add-member', [GroupController::class, 'addMember'])->name('groups.addMember');
+
+// Route::get('/groups/{group_id}/expenses',[ExpenseController::class, 'create']);
 
 //Auth
 Route::get('/register', [RegisteredUserController::class, 'create']);

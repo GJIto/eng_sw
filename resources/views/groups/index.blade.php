@@ -15,9 +15,9 @@
             </a>
         @endforeach
 
-        <div>
+        {{-- <div>
             {{ $groups->links() }}
-        </div>
+        </div> --}}
 
     </div>
 </x-layout>

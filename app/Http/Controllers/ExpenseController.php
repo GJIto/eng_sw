@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Expense;
+use App\Models\Group;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -10,36 +11,41 @@ use Illuminate\Support\Facades\Gate;
 class ExpenseController extends Controller
 {
     public function index()
-    {
+    {   
+        dd('teste index');
         $expenses = Expense::with('employer')->latest()->simplePaginate(3);
-
+        dd($expenses);
         return view('expenses.index', [
             'expenses' => $expenses
         ]);
     }
 
-    public function create()
+    public function create(Group $group)
     {
-        return view('expenses.create');
+        //  dd($group);
+        return view('expenses.create', compact('group'));
     }
 
     public function show(Expense $expense)
     {
+        dd('teste show');
         return view('expenses.show', ['expense'=>$expense]);
     }
 
-    public function store(Expense $expense)
-    {   
-        //   dd(request());
+    public function store()
+    {      
+        // dd( $expense->group_id);
+            // dd(request());
         request()->validate([
             'value' => ['required', 'decimal:2'],
-            'description' => ['required']
+            'description' => ['required'],
+            'group_id' => ['required', 'exists:groups,id'],
         ]);
 
-        Expense::create([
+        $expense=Expense::create([
             'amount' => request('value'),
             'description' => request('description'),
-            'group_id' => 1,
+            'group_id' =>  request('group_id'),
             'user_id' => Auth::user()->id
         ]);
 
